@@ -5,30 +5,30 @@
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_menu_home"
-            android:title="Home"/>
+            android:title="@string/nav_home"/>
         <item
             android:id="@+id/nav_favorite"
             android:icon="@drawable/ic_menu_favorite"
-            android:title="My favorites"/>
+            android:title="@string/nav_favorite"/>
         <item
             android:id="@+id/nav_search"
             android:icon="@drawable/ic_menu_search"
-            android:title="@string/action_search"/>
+            android:title="@string/nav_search"/>
         <item
             android:id="@+id/nav_notification"
             android:icon="@drawable/ic_menu_notification"
-            android:title="Notification"/>
+            android:title="@string/nav_notification"/>
     </group>
 
     <group android:id="@+id/settings_group">
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_menu_settings"
-            android:title="@string/action_settings"/>
+            android:title="@string/nav_settings"/>
         <item
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_menu_info"
-            android:title="@string/action_about"/>
+            android:title="@string/nav_about"/>
     </group>
 
 </menu>

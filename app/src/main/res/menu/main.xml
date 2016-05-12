@@ -3,15 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/action_search"
           android:icon="@drawable/ic_menu_search_white"
-          android:title="@string/action_search"
+          android:title="@string/nav_search"
           android:orderInCategory="100"
           app:showAsAction="always|withText" />
+    <item android:id="@+id/action_refresh"
+          android:icon="@drawable/ic_menu_refresh"
+          android:title="@string/action_refresh"
+          android:orderInCategory="120"
+          app:showAsAction="always|withText" />
     <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        android:orderInCategory="120"
+        android:title="@string/nav_settings"
+        android:orderInCategory="140"
         app:showAsAction="never" />
     <item android:id="@+id/action_about"
-          android:title="@string/action_about"
-          android:orderInCategory="140"
+          android:title="@string/nav_about"
+          android:orderInCategory="160"
           app:showAsAction="never" />
 </menu>

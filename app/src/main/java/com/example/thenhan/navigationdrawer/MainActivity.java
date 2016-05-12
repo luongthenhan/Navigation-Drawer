@@ -86,6 +86,20 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Toast.makeText(getApplicationContext(),
+                    "Je clique sur ActionSettings", Toast.LENGTH_LONG).show();
+            return true;
+        } else if (id == R.id.action_refresh) {
+            Toast.makeText(getApplicationContext(),
+                    "Je clique sur ActionRefesh", Toast.LENGTH_LONG).show();
+            return true;
+        } else if (id == R.id.action_search) {
+            Toast.makeText(getApplicationContext(),
+                    "Je clique sur ActionSearch", Toast.LENGTH_LONG).show();
+            return true;
+        } else if (id == R.id.action_about) {
+            Toast.makeText(getApplicationContext(),
+                    "Je clique sur ActionAbout", Toast.LENGTH_LONG).show();
             return true;
         }
 
