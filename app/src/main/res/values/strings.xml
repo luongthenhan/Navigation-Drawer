@@ -16,4 +16,11 @@
 
     <string name="user">Sangoku</string>
     <string name="email">7vnr@gmail.com</string>
+
+    <string-array name="spinner_data">
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+        <item>Four</item>
+    </string-array>
 </resources>
