@@ -1,14 +1,19 @@
 package com.example.thenhan.navigationdrawer;
 
+import android.app.ActionBar;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.ShareActionProvider;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -52,6 +57,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        // make rounded image
         Resources res = getResources();
         Bitmap src = BitmapFactory.decodeResource(res, R.drawable.songoku);
         RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(res, src);
@@ -102,7 +108,38 @@ public class MainActivity extends AppCompatActivity
                 return false;
             }
         });
+
+        // Locate MenuItem holding ShareActionProvider
+        MenuItem easySharedItem = menu.findItem(R.id.action_share);
+        // prepare EASY SHARE action tile:
+        // Fetch and store a ShareActionProvider for future usage
+        // an intent assembles the email(or SMS), you need only to select carrier
+        ShareActionProvider shareActionProvider =
+                (ShareActionProvider) MenuItemCompat.getActionProvider(easySharedItem);
+        // prepare an EMAIL
+        shareActionProvider.setShareIntent(emailIntent());
+        // prepare an SMS - try this later...
+        //shareActionProvider.setShareIntent(smsIntent());
+
         return true;
+    }
+
+    // return a SHARED intent to deliver an email
+    private Intent emailIntent() {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Share");
+        intent.putExtra(Intent.EXTRA_TEXT, "this is the email-text to be sent...");
+        return intent;
+    }
+
+    // return a SHARED intent to deliver an SMS text-message
+    private Intent smsIntent() {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        String yourNumber = "+84917024639";
+        intent.setData(Uri.parse("sms:" + yourNumber));
+        intent.putExtra("sms_body", "Here goes my msg");
+        return intent;
     }
 
     @Override
