@@ -7,6 +7,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
@@ -150,17 +153,23 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_search) {
             Toast.makeText(getApplicationContext(),
-                    "Je clique sur ActionSettings", Toast.LENGTH_LONG).show();
+                    "Je clique sur ActionSearch", Toast.LENGTH_LONG).show();
+            return true;
+        } else if (id == R.id.action_download) {
+            Toast.makeText(getApplicationContext(),
+                    "Je clique sur ActionDownload", Toast.LENGTH_LONG).show();
+            // Temporarily replace the download action-tile with circular progress bar
+            performSlowOperation(item);
             return true;
         } else if (id == R.id.action_refresh) {
             Toast.makeText(getApplicationContext(),
                     "Je clique sur ActionRefesh", Toast.LENGTH_LONG).show();
             return true;
-        } else if (id == R.id.action_search) {
+        } else if (id == R.id.action_settings) {
             Toast.makeText(getApplicationContext(),
-                    "Je clique sur ActionSearch", Toast.LENGTH_LONG).show();
+                    "Je clique sur ActionSettings", Toast.LENGTH_LONG).show();
             return true;
         } else if (id == R.id.action_about) {
             Toast.makeText(getApplicationContext(),
@@ -169,6 +178,35 @@ public class MainActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void performSlowOperation(MenuItem item) {
+        // temporally replace Download action-icon with a progress-bar
+        final MenuItem downloadActionItem = item;
+        downloadActionItem.setActionView(R.layout.custom_view_download);
+        downloadActionItem.expandActionView();
+        // define an Android-Handler control to receive messages from a
+        // background thread were the slow work is to be done
+        final Handler handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                Toast.makeText(getApplicationContext(),
+                        "Download complete!", Toast.LENGTH_LONG).show(); // announce completion of slow job
+                downloadActionItem.collapseActionView(); // dismiss progress-bar
+                downloadActionItem.setActionView(null);
+            }
+        };
+        // a parallel Thread runs the slow-job and signals its termination
+        new Thread() {
+            @Override
+            public void run() {
+                // real 'BUSY_WORK' goes here...(we fake 5 seconds)
+                long endTime = SystemClock.uptimeMillis() + 5000; //now + 2 seconds
+                handler.sendMessageAtTime(handler.obtainMessage(), endTime);
+                super.run();
+            }
+        }.start();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

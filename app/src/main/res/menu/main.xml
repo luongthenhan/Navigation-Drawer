@@ -17,19 +17,26 @@
         app:showAsAction="always"/>
 
     <item
+        android:id="@+id/action_download"
+        android:icon="@drawable/ic_menu_download_white"
+        android:orderInCategory="140"
+        android:title="@string/action_download"
+        app:showAsAction="always"/>
+
+    <item
         android:id="@+id/action_refresh"
         android:icon="@drawable/ic_menu_refresh"
-        android:orderInCategory="140"
+        android:orderInCategory="160"
         android:title="@string/action_refresh"
         app:showAsAction="always"/>
     <item
         android:id="@+id/action_settings"
-        android:orderInCategory="160"
+        android:orderInCategory="180"
         android:title="@string/nav_settings"
         app:showAsAction="never"/>
     <item
         android:id="@+id/action_about"
-        android:orderInCategory="180"
+        android:orderInCategory="200"
         android:title="@string/nav_about"
         app:showAsAction="never"/>
 </menu>
