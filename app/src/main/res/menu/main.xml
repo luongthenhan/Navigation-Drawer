@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/spinner"
-        android:background="#ffffffff"
+        android:background="#ff00"
         android:title="ActionBar Spinner"
         app:actionViewClass="android.widget.Spinner"
         app:showAsAction="always"/>

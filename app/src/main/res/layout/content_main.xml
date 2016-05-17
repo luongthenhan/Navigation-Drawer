@@ -14,7 +14,42 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:text="Hello World!"
+        android:text="REST-JSON"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:padding="20dp"
+                  android:orientation="vertical" >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Client Request (URL)"/>
+        <TextView
+            android:id="@+id/txtRequestUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="URL goes here..." />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Server Response (JSON)" />
+        <TextView
+            android:id="@+id/txtResponseJson"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Wait - JSON string goes here ..." />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Decoded Response (Java)" />
+        <TextView
+            android:id="@+id/txtResponseJava"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Wait - decoded JSON here ..." />
+    </LinearLayout>
 </RelativeLayout>

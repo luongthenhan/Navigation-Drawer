@@ -1,11 +1,13 @@
 package com.example.thenhan.navigationdrawer;
 
 import android.app.ActionBar;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,6 +19,7 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.ShareActionProvider;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -32,10 +35,25 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     SearchView searchView;
+    TextView txtRequestUrl, txtResponseJson, txtResponseJava;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +104,82 @@ public class MainActivity extends AppCompatActivity
             view.setText("2");
         }
 
+
+        // Web service
+        txtRequestUrl = (TextView) findViewById(R.id.txtRequestUrl);
+        txtResponseJson = (TextView) findViewById(R.id.txtResponseJson);
+        txtResponseJava = (TextView) findViewById(R.id.txtResponseJava);
+        String SERVER_URL =
+                "http://api.openweathermap.org/data/2.5/weather?q=HoChiMinh,vn&units=metric&appid=8b62177ed538309f1fe0756026559a29";
+
+        txtRequestUrl.setText(new Date() + "\n" + SERVER_URL);
+        // Use AsyncTask to execute potential slow task without freezing GUI
+        new LongOperation().execute(SERVER_URL);
+    }
+
+    private class LongOperation extends AsyncTask<String, Void, Void> {
+        private String jsonResponse;
+        private ProgressDialog dialog = new ProgressDialog(MainActivity.this);
+
+        protected void onPreExecute() {
+            dialog.setMessage("Please wait..");
+            dialog.show();
+        }
+
+        protected Void doInBackground(String... urls) {
+            try {
+                // solution uses Java.Net class (Apache.HttpClient is now deprecated)
+                // STEP1. Create a HttpURLConnection object releasing REQUEST to given site
+                URL url = new URL(urls[0]); //argument supplied in the call to AsyncTask
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestProperty("User-Agent", "");
+                urlConnection.setRequestMethod("GET");
+                urlConnection.setDoInput(true);
+                urlConnection.connect();
+
+                // STEP2. wait for incoming RESPONSE stream, place data in a buffer
+                InputStream isResponse = urlConnection.getInputStream();
+                BufferedReader responseBuffer = new BufferedReader(new
+                        InputStreamReader(isResponse));
+
+                // STEP3. Arriving JSON fragments are concatenate into a StringBuilder
+                String myLine = "";
+                StringBuilder strBuilder = new StringBuilder();
+                while ((myLine = responseBuffer.readLine()) != null) {
+                    strBuilder.append(myLine);
+                }
+                //show response (JSON encoded data)
+                jsonResponse = strBuilder.toString();
+                Log.e("RESPONSE", jsonResponse);
+            } catch (Exception e) {
+                Log.e("RESPONSE Error", e.getMessage());
+            }
+            return null; // needed to gracefully terminate Void method
+        }
+
+        protected void onPostExecute(Void unused) {
+            try {
+                dialog.dismiss();
+
+                // update GUI with JSON Response
+                txtResponseJson.setText(jsonResponse);
+
+                // Step4. Convert JSON list into a Java collection of Person objects
+                // prepare to decode JSON response and create Java list
+                Gson gson = new Gson();
+                String result = "";
+                try {
+                    JsonElement jelement = new JsonParser().parse(jsonResponse);
+                    JsonObject jobject = (JsonObject) jelement;
+                    result += jobject.get("name").toString() + "\n";
+                } catch (Exception e) {
+                    Log.e("PARSING", e.getMessage());
+                }
+                txtResponseJava.setText(result);
+            } catch (JsonSyntaxException e) {
+                Log.e("POST-Execute", e.getMessage());
+            }
+        }
     }
 
     @Override
